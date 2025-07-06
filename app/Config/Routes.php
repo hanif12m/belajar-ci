@@ -51,3 +51,6 @@ $routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
 
 $routes->get('faq', 'Home::faq');  // F.A.Q tidak membutuhkan filter auth jika tidak diperlukan
 
+$routes->get('profile', 'Home::profile', ['filter' => 'auth']);
+
+$routes->resource('api', ['controller' => 'apiController']);
