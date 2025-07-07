@@ -12,34 +12,36 @@ class DiskonController extends BaseController
     public function __construct()
     {
         $this->diskonModel = new DiskonModel();
-        helper(['form']);
+        helper(['form', 'number']);
     }
 
     public function index()
-{
-    $keyword = $this->request->getGet('q');
-    $query = $this->diskonModel;
+    {
+        $keyword = $this->request->getGet('q');
+        $query = $this->diskonModel;
 
-    if ($keyword) {
-        $query = $query->like('tanggal', $keyword)->orLike('nominal', $keyword);
+        if ($keyword) {
+            $query = $query->like('tanggal', $keyword)->orLike('nominal', $keyword);
+        }
+
+        $data['diskon'] = $query->orderBy('tanggal', 'ASC')->paginate(5);
+        $data['pager'] = $this->diskonModel->pager;
+        $data['keyword'] = $keyword;
+
+        // ✅ Update session diskon aktif untuk hari ini
+        $today = date('Y-m-d');
+        $diskonAktif = $this->diskonModel->where('tanggal', $today)->first();
+        if ($diskonAktif) {
+            session()->set('diskon_nominal', $diskonAktif['nominal']);
+            session()->set('diskon_aktif', $diskonAktif['nominal']); 
+        } else {
+            session()->remove('diskon_nominal');
+            session()->remove('diskon_aktif'); 
+
+        }
+
+        return view('v_diskon', $data);
     }
-
-    $data['diskon'] = $query->orderBy('tanggal', 'ASC')->paginate(5);
-    $data['pager'] = $this->diskonModel->pager;
-    $data['keyword'] = $keyword;
-
-    // Update session diskon aktif
-    $today = date('Y-m-d');
-    $diskonAktif = $this->diskonModel->where('tanggal', $today)->first();
-    if ($diskonAktif) {
-        session()->set('diskon_nominal', $diskonAktif['nominal']);
-    } else {
-        session()->remove('diskon_nominal');
-    }
-
-    return view('v_diskon', $data);
-}
-
 
     public function create()
     {
@@ -67,9 +69,9 @@ class DiskonController extends BaseController
             'nominal' => $nominal
         ]);
 
-        // Cek apakah diskon hari ini
+        // ✅ Jika diskon untuk hari ini, simpan ke session diskon_nominal
         if ($tanggal == date('Y-m-d')) {
-            session()->set('diskon_aktif', $nominal);
+            session()->set('diskon_nominal', $nominal);
         }
 
         return redirect()->to('/diskon')->with('redirect_success', 'Data berhasil ditambahkan.');
@@ -89,9 +91,9 @@ class DiskonController extends BaseController
 
         $this->diskonModel->update($id, ['nominal' => $nominal]);
 
-        // Jika diskon ini adalah untuk hari ini, update session juga
+        // ✅ Jika diskon ini adalah untuk hari ini, update session juga
         if ($diskon && $diskon['tanggal'] == date('Y-m-d')) {
-            session()->set('diskon_aktif', $nominal);
+            session()->set('diskon_nominal', $nominal);
         }
 
         return redirect()->to('/diskon')->with('redirect_success', 'Data berhasil diperbarui.');
@@ -99,12 +101,13 @@ class DiskonController extends BaseController
 
     public function delete($id)
     {
+        $diskon = $this->diskonModel->find($id);
+
         $this->diskonModel->delete($id);
 
-        // Jika diskon yang dihapus adalah diskon hari ini, hapus dari session
-        $deletedDiskon = $this->diskonModel->find($id);
-        if ($deletedDiskon && $deletedDiskon['tanggal'] == date('Y-m-d')) {
-            session()->remove('diskon_aktif');
+        // ✅ Jika diskon yang dihapus adalah diskon hari ini, hapus dari session
+        if ($diskon && $diskon['tanggal'] == date('Y-m-d')) {
+            session()->remove('diskon_nominal');
         }
 
         return redirect()->to('/diskon')->with('redirect_success', 'Data berhasil dihapus.');

@@ -1,15 +1,25 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 
-<h3>Diskon</h3>
+<!-- Informasi Diskon Hari Ini -->
+<?php if (session()->has('diskon_nominal')): ?>
+  <div class="alert alert-info">
+    <strong>Diskon Hari Ini:</strong> <?= number_to_currency(session('diskon_nominal'), 'IDR') ?>
+  </div>
+<?php else: ?>
+  <div class="alert alert-warning">
+    Tidak ada diskon aktif hari ini.
+  </div>
+<?php endif ?>
 
 <!-- Flashdata -->
 <?php if (session()->getFlashdata('redirect_success')) : ?>
 <div class="alert alert-success alert-dismissible fade show" role="alert">
   <?= session()->getFlashdata('redirect_success') ?>
-  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 <?php endif ?>
+
 
 <?php if (session()->getFlashdata('validation')) : ?>
 <div class="alert alert-danger alert-dismissible fade show" role="alert">

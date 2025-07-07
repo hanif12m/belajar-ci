@@ -71,13 +71,6 @@ if (empty($segments)) {
           <div class="card-body">
             <h5 class="card-title"><?= $hlm ?></h5>
 
-            <?php if (session()->getFlashdata('redirect_success')) : ?>
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <?= session()->getFlashdata('redirect_success') ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            <?php endif; ?>
-
             <?= $this->renderSection('content') ?>
 
           </div>
