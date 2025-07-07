@@ -50,7 +50,15 @@ $routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
 $routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
 
 $routes->get('faq', 'Home::faq');  // F.A.Q tidak membutuhkan filter auth jika tidak diperlukan
+$routes->get('contact', 'Home::contact');  // F.A.Q tidak membutuhkan filter auth jika tidak diperlukan
 
 $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
+
+$routes->group('diskon', ['filter' => 'auth'], function ($routes) {
+    $routes->get('/', 'DiskonController::index');
+    $routes->post('store', 'DiskonController::store');
+    $routes->post('update/(:num)', 'DiskonController::update/$1');
+    $routes->get('delete/(:num)', 'DiskonController::delete/$1');
+});
 
 $routes->resource('api', ['controller' => 'apiController']);

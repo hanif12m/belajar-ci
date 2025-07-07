@@ -66,3 +66,109 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+
+# Aplikasi Toko Online (CodeIgniter 4)
+
+Aplikasi ini adalah sistem toko online sederhana yang dikembangkan menggunakan framework **CodeIgniter 4**. Aplikasi mendukung manajemen produk, kategori, diskon, keranjang belanja, checkout, dan riwayat transaksi. Sistem juga menggunakan **library Cart**, integrasi API ongkir RajaOngkir, dan fitur dashboard monitoring berbasis webservice.
+
+---
+
+## 🧩 Fitur
+
+### 🛒 Pengelolaan Produk
+- Tambah, ubah, dan hapus data produk
+- Unggah gambar produk
+- Tampilkan data produk dengan DataTables (search & pagination)
+
+### 📂 Kategori Produk
+- CRUD kategori produk
+- Pengelompokan produk berdasarkan kategori
+
+### 🎁 Diskon Produk
+- CRUD diskon
+- Diskon disimpan dalam session dan diterapkan saat menambahkan produk ke keranjang
+
+### 🛍️ Keranjang Belanja
+- Tambah produk ke keranjang
+- Edit dan hapus isi keranjang
+- Kosongkan keranjang
+- Hitung subtotal per item dan total keseluruhan
+
+### 📦 Checkout & Transaksi
+- Form checkout dengan input alamat & username
+- Perhitungan ongkir via **API RajaOngkir Komerce**
+- Penyimpanan transaksi dan detailnya ke database
+
+### 📊 Riwayat Transaksi
+- Menampilkan semua pembelian oleh user
+- Modal detail transaksi (produk, jumlah, diskon, subtotal)
+
+### 🌐 Webservice (API)
+- Endpoint RESTful (`/api`) dengan API key
+- Return JSON berisi data transaksi dan detailnya
+
+### 📈 Dashboard Monitoring
+- Akses data pembelian dari endpoint API
+- Menampilkan data username, alamat, total, status, dan **jumlah item** setiap transaksi
+
+## ⚙️ Instalasi
+
+1. **Clone repositori**
+
+```bash
+git clone https://github.com/hanif12m/belajar-ci
+cd projek-toko
+
+##Install Dependensi
+composer install
+
+##Salin file .env
+cp env .env
+
+##Konfigurasi file .env
+database.default.hostname = localhost
+database.default.database = db_ci4
+database.default.username = root
+database.default.password =
+database.default.DBDriver = MySQLi
+
+COST_KEY = [API_KEY_RAJAKONGKIR]
+API_KEY = random123678abcghi
+
+##Jalankan server
+php spark serve
+
+#struktur proyek
+app/
+├── Controllers/
+│   ├── ProdukController.php
+│   ├── ProductControllerr.php
+│   ├── ProductCategory.php
+│   ├── DiskonController.php
+│   ├── TransaksiController.php
+│   └── ApiController.php
+├── Models/
+│   ├── ProductModel.php
+│   ├── UserModel.php
+│   ├── ProductCategoryModel.php
+│   ├── DiskonModel.php
+│   ├── TransactionModel.php
+│   └── TransactionDetailModel.php
+├── Views/
+│   ├── v_contact.php
+│   ├── v_faq.php
+│   ├── v_home.php
+│   ├── v_produk.php
+│   ├── v_profile.php
+│   ├── v_diskon.php
+│   ├── v_keranjang.php
+│   ├── v_checkout.php
+│   ├── v_riwayat.php
+│   └── layout.php
+├── Config/
+│   └── Routes.php
+
+
+#webservice API
+Key: random123678abcghi

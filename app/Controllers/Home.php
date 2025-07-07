@@ -56,6 +56,12 @@ $product = $this->product->findAll();
     return view('v_profile', $data);
 }
 
+
+public function contact() {
+        // Panggil view untuk halaman contact
+        return view('v_contact');
+    }
+
     public function faq() {
         // Panggil view untuk halaman F.A.Q
         return view('v_faq');

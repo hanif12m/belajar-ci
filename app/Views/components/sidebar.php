@@ -40,6 +40,13 @@
                     <span>Produk</span>
                 </a>
             </li><!-- End Produk Nav -->
+
+             <li class="nav-item">
+        <a class="nav-link <?= (uri_string() == 'diskon') ? '' : 'collapsed' ?>" href="<?= base_url('diskon') ?>">
+          <i class="bi bi-cash-coin"></i>
+          <span>Diskon</span>
+        </a>
+      </li>
         <?php
         }
         ?>
@@ -58,9 +65,22 @@ if (session()->get('role') == 'admin') {
             <span>Kategori Produk</span>
         </a>
     </li><!-- End Kategori Produk Nav -->
+
+
+   
+
 <?php
 }
 ?>
+
+
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'contact') ? "" : "collapsed" ?>" href="contact">
+                <i class="bi bi-question-circle"></i>
+                <span>Contact</span>
+            </a>
+        </li>
+
 
 
         <li class="nav-item">
